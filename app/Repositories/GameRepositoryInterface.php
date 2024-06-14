@@ -12,5 +12,7 @@ interface GameRepositoryInterface
 
     public function update($id, array $data);
 
+    public function updateOrCreate(array $find, array $data);
+
     public function delete($id);
 }

@@ -52,6 +52,21 @@ class BallDontLieApiService
         return $this->transformPlayerData($jsonResponse['data']);
     }
 
+    public function fetchGames(): array
+    {
+        $response = $this->client->get('https://api.balldontlie.io/v1/' . 'games?seasons[]=2023', [
+            RequestOptions::HEADERS => [
+                'Authorization' => 'eabe2808-4427-4606-832d-c83bf8f1cbc3',
+            ]
+        ]);
+
+        $jsonResponse = json_decode($response->getBody()->getContents(), true);
+        if(!isset($jsonResponse['data'])) {
+            throw new \Exception('Não foi possível retornar os jogos.');
+        }
+        return $this->transformGameData($jsonResponse['data']);
+    }
+
     public function transformTeamData($teams): array
     {
         return array_map(function ($team) {
@@ -84,6 +99,25 @@ class BallDontLieApiService
                 'draft_year' => $player['draft_year'],
                 'draft_round' => $player['draft_round'],
                 'draft_number' => $player['draft_number'],
+            ];
+        }, $players);
+    }
+
+    public function transformGameData($players): array
+    {
+        return array_map(function ($player) {
+            return [
+                'api_id' => $player['id'],
+                'api_home_team_id' => $player['home_team']['id'],
+                'api_visitor_team_id' => $player['visitor_team']['id'],
+                'date' => $player['date'],
+                'season' => $player['season'],
+                'status' => $player['status'],
+                'period' => $player['period'],
+                'time' => $player['time'],
+                'postseason' => $player['postseason'] ?? null,
+                'home_team_score' => $player['home_team_score'] ?? null,
+                'visitor_team_score' => $player['visitor_team_score'] ?? null,
             ];
         }, $players);
     }
