@@ -24,6 +24,11 @@ class TeamRepository implements TeamRepositoryInterface
         return $this->model->find($id);
     }
 
+    public function findByApiId($apiId)
+    {
+        return $this->model->where('api_id', $apiId)->first();
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);
@@ -34,6 +39,10 @@ class TeamRepository implements TeamRepositoryInterface
         $user = $this->model->find($id);
         $user->update($data);
         return $user;
+    }
+    public function updateOrCreate(array $find, array $data)
+    {
+        return $this->model->updateOrCreate($find, $data);
     }
 
     public function delete($id): int
