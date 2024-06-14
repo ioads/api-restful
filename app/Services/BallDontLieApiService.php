@@ -9,10 +9,14 @@ use GuzzleHttp\RequestOptions;
 class BallDontLieApiService
 {
     protected Client $client;
+    protected $baseUrl;
+    protected $token;
 
     public function __construct(Client $client)
     {
         $this->client = $client;
+        $this->baseUrl = config('services.ballDontLie.baseUrl');
+        $this->token = config('services.ballDontLie.token');
     }
 
     /**
@@ -20,9 +24,9 @@ class BallDontLieApiService
      */
     public function fetchTeams(): array
     {
-        $response = $this->client->get('https://api.balldontlie.io/v1/' . 'teams', [
+        $response = $this->client->get($this->baseUrl . 'teams', [
             RequestOptions::HEADERS => [
-                'Authorization' => 'eabe2808-4427-4606-832d-c83bf8f1cbc3',
+                'Authorization' => $this->token,
             ]
         ]);
 
@@ -39,9 +43,9 @@ class BallDontLieApiService
      */
     public function fetchPlayers(): array
     {
-        $response = $this->client->get('https://api.balldontlie.io/v1/' . 'players?per_page=100', [
+        $response = $this->client->get($this->baseUrl . 'players?per_page=100', [
             RequestOptions::HEADERS => [
-                'Authorization' => 'eabe2808-4427-4606-832d-c83bf8f1cbc3',
+                'Authorization' => $this->token,
             ]
         ]);
 
@@ -54,9 +58,9 @@ class BallDontLieApiService
 
     public function fetchGames(): array
     {
-        $response = $this->client->get('https://api.balldontlie.io/v1/' . 'games?seasons[]=2023', [
+        $response = $this->client->get($this->baseUrl . 'games?seasons[]=2023&per_page=200', [
             RequestOptions::HEADERS => [
-                'Authorization' => 'eabe2808-4427-4606-832d-c83bf8f1cbc3',
+                'Authorization' => $this->token,
             ]
         ]);
 
