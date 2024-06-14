@@ -2,16 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Models\Team;
+use App\Models\Player;
 use Illuminate\Database\Eloquent\Collection;
 
-class TeamRepository implements TeamRepositoryInterface
+class PlayerRepository implements PlayerRepositoryInterface
 {
-    protected Team $model;
+    protected Player $model;
 
-    public function __construct(Team $team)
+    public function __construct(Player $player)
     {
-        $this->model = $team;
+        $this->model = $player;
     }
 
     public function all(): Collection

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\TeamRepository;
+use App\Http\Resources\TeamResource;
 use App\Repositories\TeamRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -19,6 +19,6 @@ class TeamController extends Controller
     {
         $teams = $this->teamRepository->all();
 
-        return new TeamRepository($teams);
+        return new TeamResource($teams);
     }
 }

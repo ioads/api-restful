@@ -18,5 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::prefix('teams')->group(function () {
         Route::get('/', 'TeamController@index');
     });
+    Route::prefix('players')->group(function () {
+        Route::get('/', 'TeamController@index');
+    });
     return $request->user();
 });
