@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    Route::prefix('teams')->group(function () {
-        Route::get('/', 'TeamController@index');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
     });
-    Route::prefix('players')->group(function () {
-        Route::get('/', 'TeamController@index');
-    });
-    return $request->user();
+
+    Route::resource('teams', \App\Http\Controllers\TeamController::class);
+
+    Route::resource('players', \App\Http\Controllers\PlayerController::class);
+
+    Route::resource('games', \App\Http\Controllers\PlayerController::class);
 });
