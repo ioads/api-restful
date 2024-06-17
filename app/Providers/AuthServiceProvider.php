@@ -2,13 +2,14 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\Team;
+use App\Models\User;
 use App\Policies\GamePolicy;
 use App\Policies\PlayerPolicy;
 use App\Policies\TeamPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -19,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
+        User::class => UserPolicy::class,
         Team::class => TeamPolicy::class,
         Player::class => PlayerPolicy::class,
         Game::class => GamePolicy::class,

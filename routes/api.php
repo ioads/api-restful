@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:sanctum', 'App\Http\Middleware\XAuthorizationMiddleware'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
     Route::resource('teams', \App\Http\Controllers\TeamController::class);
 
     Route::resource('players', \App\Http\Controllers\PlayerController::class);
