@@ -48,9 +48,9 @@ class GameRepository implements GameRepositoryInterface
         return $this->model->updateOrCreate($find, $data);
     }
 
-    public function delete($id): int
+    public function delete(Game $game): int
     {
-        return $this->model->destroy($id);
+        return $game->delete();
     }
 
     public function search(Request $request): \Illuminate\Support\Collection

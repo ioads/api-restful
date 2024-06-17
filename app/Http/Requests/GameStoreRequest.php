@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Game;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GameStoreRequest extends FormRequest
@@ -11,7 +12,7 @@ class GameStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('create', Game::class);
     }
 
     /**

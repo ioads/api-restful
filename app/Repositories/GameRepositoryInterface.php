@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Models\Game;
+
 interface GameRepositoryInterface
 {
     public function all();
@@ -14,5 +16,5 @@ interface GameRepositoryInterface
 
     public function updateOrCreate(array $find, array $data);
 
-    public function delete($id);
+    public function delete(Game $game);
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GameStoreRequest;
 use App\Http\Requests\GameUpdateRequest;
 use App\Http\Resources\GameResource;
+use App\Models\Game;
 use App\Repositories\GameRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -19,18 +21,28 @@ class GameController extends Controller
         $this->gameRepository = $gameRepository;
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Game::class);
+
         $games = $this->gameRepository->all();
 
         return response()->json($games);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function show($id): GameResource
     {
-        $team = $this->gameRepository->findOrFail($id);
+        $game = $this->gameRepository->findOrFail($id);
 
-        return new GameResource($team);
+        $this->authorize('view', $game);
+
+        return new GameResource($game);
     }
 
     public function store(GameStoreRequest $request): GameResource
@@ -42,11 +54,16 @@ class GameController extends Controller
         return new GameResource($team);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function edit($id): GameResource
     {
-        $team = $this->gameRepository->findOrFail($id);
+        $game = $this->gameRepository->findOrFail($id);
 
-        return new GameResource($team);
+        $this->authorize('edit', $game);
+
+        return new GameResource($game);
     }
 
     public function update(GameUpdateRequest $request, $id): GameResource
@@ -58,9 +75,14 @@ class GameController extends Controller
         return new GameResource($team);
     }
 
-    public function destroy($id)
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(Game $game)
     {
-        return $this->gameRepository->delete($id);
+        $this->authorize('destroy', $game);
+
+        return $this->gameRepository->delete($game);
     }
 
     public function search(Request $request): Collection

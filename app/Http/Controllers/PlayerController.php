@@ -8,6 +8,8 @@ use App\Http\Resources\PlayerResource;
 use App\Models\Player;
 use App\Models\Team;
 use App\Repositories\PlayerRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -20,7 +22,10 @@ class PlayerController extends Controller
         $this->playerRepository = $playerRepository;
     }
 
-    public function index()
+    /**
+     * @throws AuthorizationException
+     */
+    public function index(): JsonResponse
     {
         $this->authorize('viewAny', Player::class);
 
@@ -47,6 +52,9 @@ class PlayerController extends Controller
         return new PlayerResource($player);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function edit($id): PlayerResource
     {
         $player = $this->playerRepository->findOrFail($id);
@@ -65,11 +73,14 @@ class PlayerController extends Controller
         return new PlayerResource($team);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function destroy(Player $player)
     {
         $this->authorize('destroy', $player);
 
-        return $this->playerRepository->delete($id);
+        return $this->playerRepository->delete($player);
     }
 
     public function search(Request $request): Collection
