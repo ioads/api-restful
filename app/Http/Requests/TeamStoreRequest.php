@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Team;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TeamStoreRequest extends FormRequest
@@ -11,7 +12,7 @@ class TeamStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('create', Team::class);
     }
 
     /**

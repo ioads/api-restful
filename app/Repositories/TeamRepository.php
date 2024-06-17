@@ -52,9 +52,9 @@ class TeamRepository implements TeamRepositoryInterface
         return $this->model->updateOrCreate($find, $data);
     }
 
-    public function delete($id): int
+    public function delete(Team $team): int
     {
-        return $this->model->destroy($id);
+        return $team->delete();
     }
 
     public function search(Request $request): \Illuminate\Support\Collection

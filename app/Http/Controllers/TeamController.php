@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TeamStoreRequest;
 use App\Http\Requests\TeamUpdateRequest;
 use App\Http\Resources\TeamResource;
+use App\Models\Team;
 use App\Repositories\TeamRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -21,6 +23,8 @@ class TeamController extends Controller
 
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Team::class);
+
         $teams = $this->teamRepository->all();
 
         return response()->json($teams);
@@ -29,6 +33,8 @@ class TeamController extends Controller
     public function show($id): TeamResource
     {
         $team = $this->teamRepository->findOrFail($id);
+
+        $this->authorize('view', $team);
 
         return new TeamResource($team);
     }
@@ -46,6 +52,8 @@ class TeamController extends Controller
     {
         $team = $this->teamRepository->findOrFail($id);
 
+        $this->authorize('edit', $team);
+
         return new TeamResource($team);
     }
 
@@ -58,9 +66,14 @@ class TeamController extends Controller
         return new TeamResource($team);
     }
 
-    public function destroy($id)
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(Team $team)
     {
-        return $this->teamRepository->delete($id);
+        $this->authorize('destroy', $team);
+
+        return $this->teamRepository->delete($team);
     }
 
     public function search(Request $request): Collection
