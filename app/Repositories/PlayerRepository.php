@@ -48,9 +48,9 @@ class PlayerRepository implements PlayerRepositoryInterface
         return $this->model->updateOrCreate($find, $data);
     }
 
-    public function delete($id): int
+    public function delete(Player $player): int
     {
-        return $this->model->destroy($id);
+        return $player->delete();
     }
 
     public function search(Request $request): \Illuminate\Support\Collection

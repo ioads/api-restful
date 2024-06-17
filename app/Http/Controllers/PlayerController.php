@@ -6,6 +6,7 @@ use App\Http\Requests\PlayerStoreRequest;
 use App\Http\Requests\PlayerUpdateRequest;
 use App\Http\Resources\PlayerResource;
 use App\Models\Player;
+use App\Models\Team;
 use App\Repositories\PlayerRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -21,6 +22,8 @@ class PlayerController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', Player::class);
+
         $players = $this->playerRepository->all();
 
         return response()->json($players);
@@ -28,9 +31,11 @@ class PlayerController extends Controller
 
     public function show($id): PlayerResource
     {
-        $team = $this->playerRepository->findOrFail($id);
+        $player = $this->playerRepository->findOrFail($id);
 
-        return new PlayerResource($team);
+        $this->authorize('view', $player);
+
+        return new PlayerResource($player);
     }
 
     public function store(PlayerStoreRequest $request): PlayerResource
@@ -46,6 +51,8 @@ class PlayerController extends Controller
     {
         $player = $this->playerRepository->findOrFail($id);
 
+        $this->authorize('edit', $player);
+
         return new PlayerResource($player);
     }
 
@@ -58,13 +65,17 @@ class PlayerController extends Controller
         return new PlayerResource($team);
     }
 
-    public function destroy($id)
+    public function destroy(Player $player)
     {
+        $this->authorize('destroy', $player);
+
         return $this->playerRepository->delete($id);
     }
 
     public function search(Request $request): Collection
     {
+        $this->authorize('search', Player::class);
+
         return $this->playerRepository->search($request);
     }
 }

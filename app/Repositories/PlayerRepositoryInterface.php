@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Models\Player;
+
 interface PlayerRepositoryInterface
 {
     public function all();
@@ -14,5 +16,5 @@ interface PlayerRepositoryInterface
 
     public function updateOrCreate(array $find, array $data);
 
-    public function delete($id);
+    public function delete(Player $player);
 }

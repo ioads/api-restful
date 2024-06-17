@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Player;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PlayerStoreRequest extends FormRequest
@@ -11,7 +12,7 @@ class PlayerStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('create', Player::class);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Player;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PlayerUpdateRequest extends FormRequest
@@ -11,7 +12,7 @@ class PlayerUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('update', Player::class);
     }
 
     /**

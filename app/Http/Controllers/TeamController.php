@@ -78,6 +78,8 @@ class TeamController extends Controller
 
     public function search(Request $request): Collection
     {
+        $this->authorize('search', Team::class);
+
         return $this->teamRepository->search($request);
     }
 }
