@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Game;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GameRepository implements GameRepositoryInterface
 {
@@ -22,6 +24,11 @@ class GameRepository implements GameRepositoryInterface
     public function find($id)
     {
         return $this->model->find($id);
+    }
+
+    public function findOrFail($id)
+    {
+        return $this->model->findOrFail($id);
     }
 
     public function create(array $data)
@@ -44,5 +51,16 @@ class GameRepository implements GameRepositoryInterface
     public function delete($id): int
     {
         return $this->model->destroy($id);
+    }
+
+    public function search(Request $request): \Illuminate\Support\Collection
+    {
+        $query = DB::table('games');
+
+        if ($request->has('startDate') && $request->has('endDate')) {
+            $query->whereBetween('date', [$request->startDate, $request->endDate]);
+        }
+
+        return $query->get();
     }
 }
