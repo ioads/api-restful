@@ -27,5 +27,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::group(['prefix' => 'search'], function () {
         Route::get('/teams', [\App\Http\Controllers\TeamController::class, 'search']);
+        Route::get('/players', [\App\Http\Controllers\PlayerController::class, 'search']);
     });
 });

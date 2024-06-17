@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlayerStoreRequest;
+use App\Http\Requests\PlayerUpdateRequest;
+use App\Http\Resources\PlayerResource;
+use App\Models\Player;
 use App\Repositories\PlayerRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class PlayerController extends Controller
 {
@@ -16,8 +21,50 @@ class PlayerController extends Controller
 
     public function index()
     {
-        $teams = $this->playerRepository->all();
+        $players = $this->playerRepository->all();
 
-        return new PlayerResource($teams);
+        return response()->json($players);
+    }
+
+    public function show($id): PlayerResource
+    {
+        $team = $this->playerRepository->findOrFail($id);
+
+        return new PlayerResource($team);
+    }
+
+    public function store(PlayerStoreRequest $request): PlayerResource
+    {
+        $data = $request->validated();
+
+        $player = $this->playerRepository->create($data);
+
+        return new PlayerResource($player);
+    }
+
+    public function edit($id): PlayerResource
+    {
+        $player = $this->playerRepository->findOrFail($id);
+
+        return new PlayerResource($player);
+    }
+
+    public function update(PlayerUpdateRequest $request, $id): PlayerResource
+    {
+        $data = $request->validated();
+
+        $team = $this->playerRepository->update($id, $data);
+
+        return new PlayerResource($team);
+    }
+
+    public function destroy($id)
+    {
+        return $this->playerRepository->delete($id);
+    }
+
+    public function search(Request $request): Collection
+    {
+        return $this->playerRepository->search($request);
     }
 }

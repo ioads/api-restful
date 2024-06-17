@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Player;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PlayerRepository implements PlayerRepositoryInterface
 {
@@ -22,6 +24,11 @@ class PlayerRepository implements PlayerRepositoryInterface
     public function find($id)
     {
         return $this->model->find($id);
+    }
+
+    public function findOrFail($id)
+    {
+        return $this->model->findOrFail($id);
     }
 
     public function create(array $data)
@@ -44,5 +51,20 @@ class PlayerRepository implements PlayerRepositoryInterface
     public function delete($id): int
     {
         return $this->model->destroy($id);
+    }
+
+    public function search(Request $request): \Illuminate\Support\Collection
+    {
+        $query = DB::table('players');
+
+        if ($request->has('first_name')) {
+            $query->where('first_name', 'LIKE', '%'.$request->first_name.'%');
+        }
+
+        if ($request->has('last_name')) {
+            $query->where('last_name', 'LIKE', '%'.$request->last_name.'%');
+        }
+
+        return $query->get();
     }
 }
