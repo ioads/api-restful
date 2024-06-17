@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Repositories\GameRepository;
 use App\Services\BallDontLieApiService;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 
@@ -35,7 +36,7 @@ class CreateGamesCommand extends Command
 
     /**
      * Execute the console command.
-     * @throws GuzzleException
+     * @throws Exception
      */
     public function handle(): void
     {

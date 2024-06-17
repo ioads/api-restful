@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TeamRepository implements TeamRepositoryInterface
 {
@@ -29,6 +31,11 @@ class TeamRepository implements TeamRepositoryInterface
         return $this->model->where('api_id', $apiId)->first();
     }
 
+    public function findOrFail($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);
@@ -36,9 +43,9 @@ class TeamRepository implements TeamRepositoryInterface
 
     public function update($id, array $data)
     {
-        $user = $this->model->find($id);
-        $user->update($data);
-        return $user;
+        $team = $this->model->find($id);
+        $team->update($data);
+        return $team;
     }
     public function updateOrCreate(array $find, array $data)
     {
@@ -48,5 +55,20 @@ class TeamRepository implements TeamRepositoryInterface
     public function delete($id): int
     {
         return $this->model->destroy($id);
+    }
+
+    public function search(Request $request): \Illuminate\Support\Collection
+    {
+        $query = DB::table('teams');
+
+        if ($request->has('name')) {
+            $query->where('name', 'LIKE', '%'.$request->name.'%');
+        }
+
+        if ($request->has('abbreviation')) {
+            $query->where('abbreviation', '=', $request->abbreviation);
+        }
+
+        return $query->get();
     }
 }

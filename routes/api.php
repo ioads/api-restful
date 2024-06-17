@@ -24,4 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('players', \App\Http\Controllers\PlayerController::class);
 
     Route::resource('games', \App\Http\Controllers\PlayerController::class);
+
+    Route::group(['prefix' => 'search'], function () {
+        Route::get('/teams', [\App\Http\Controllers\TeamController::class, 'search']);
+    });
 });
