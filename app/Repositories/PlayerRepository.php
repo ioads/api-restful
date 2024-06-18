@@ -18,7 +18,7 @@ class PlayerRepository implements PlayerRepositoryInterface
 
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with('team')->get();
     }
 
     public function find($id)

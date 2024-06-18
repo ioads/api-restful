@@ -18,7 +18,7 @@ class GameRepository implements GameRepositoryInterface
 
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with('visitor', 'home')->get();
     }
 
     public function find($id)
