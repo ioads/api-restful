@@ -1,6 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,16 +17,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
 Route::middleware(['auth:sanctum', 'App\Http\Middleware\XAuthorizationMiddleware'])->group(function () {
-    Route::resource('teams', \App\Http\Controllers\TeamController::class);
+    Route::resource('teams', TeamController::class);
 
-    Route::resource('players', \App\Http\Controllers\PlayerController::class);
+    Route::resource('players', PlayerController::class);
 
-    Route::resource('games', \App\Http\Controllers\GameController::class);
+    Route::resource('games', GameController::class);
 
     Route::group(['prefix' => 'search'], function () {
-        Route::get('/teams', [\App\Http\Controllers\TeamController::class, 'search']);
-        Route::get('/players', [\App\Http\Controllers\PlayerController::class, 'search']);
-        Route::get('/games', [\App\Http\Controllers\GameController::class, 'search']);
+        Route::get('/teams', [TeamController::class, 'search']);
+        Route::get('/players', [PlayerController::class, 'search']);
+        Route::get('/games', [GameController::class, 'search']);
     });
 });
