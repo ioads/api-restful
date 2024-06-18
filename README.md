@@ -25,6 +25,14 @@ Acesse o terminal do container
 
 `` docker-compose exec -it app bash``
 
-Rode as migrations
+Execute as migrations
 
 ``php artisan migrate --seed``
+
+Execute os commands para poder popular as tabelas de teams, players e games
+
+``php artisan app:create-teams-command``
+
+``php artisan app:create-players-command``
+
+``php artisan app:create-games-command``
