@@ -24,4 +24,9 @@ class Player extends Model
         'draft_round',
         'draft_number',
     ];
+
+    public function team(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Team::class, 'api_team_id', 'api_id');
+    }
 }
